@@ -124,15 +124,17 @@ class Reservation(models.Model):
     seat_number = models.CharField(max_length=50)
     journey_date = models.DateField()
     reservation_time = models.DateTimeField(default=timezone.now)
-    choice=[
+    choice = [
         ('Pending', 'Pending'),
         ('Completed', 'Completed')
     ]
-    reservation_status=models.CharField(max_length=100,choices=choice,default="Pending")
+    reservation_status = models.CharField(max_length=100, choices=choice, default="Pending")
     is_confirmed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('bus', 'journey_date','seat_number')
+        unique_together = ('bus', 'journey_date', 'seat_number')
+
+
 
         
 

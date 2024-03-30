@@ -195,3 +195,20 @@ class BusesViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        
+        
+class PaymentView(ViewSet):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def list(self, request, *args, **kwargs):
+        user_id = request.user.id  # Get the logged-in user's ID
+        qs = Payment.objects.filter(user=user_id)  # Filter payments by user ID
+        serializer = PaymentSerializer(qs, many=True)
+        return Response(data=serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        qs = Payment.objects.get(id=id, user=request.user.id)  # Filter payment by user ID
+        serializer = PaymentSerializer(qs)
+        return Response(data=serializer.data)

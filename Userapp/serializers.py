@@ -46,7 +46,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reservation
-        fields = ['seat_number', 'journey_date', 'user', 'bus', 'reservation_status']
+        fields = ['seat_number', 'journey_date', 'user', 'bus', 'reservation_status','id']
        
     def validate_seat_number(self, value):
         journey_date = self.initial_data.get('journey_date')

@@ -8,6 +8,8 @@ router.register("category",views.CategoryView,basename="category")
 router.register("busoperators",views.busoperator,basename="busoperators_list")
 router.register("bus",views.BusView,basename="bus")
 router.register("UserBuses",views.UserBuses,basename="UserBuses")
+router.register("Userpayment",views.PaymentView,basename="Userpayment")
+
 # router.register("userProfileEdit",views.ProfileEdit,basename="userProfileEdit")
 
 
