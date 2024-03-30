@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework import authentication
 from rest_framework import permissions
 from Manager.models import Busoperator,Category,Buses,Offer,Review,Payment,Reservation
-from BusOperator.serializers import BusSerializer,CategorySerializer,OperatorSerializer,OfferSerializer,ReviewSerializer,PaymentSerializer,ReservationSerializer,profileSerializer
+from BusOperator.serializers import BusSerializer,CategorySerializer,OperatorSerializer,OfferSerializer,ReviewSerializer,PaymentSerializer,ReservationSerializer,profileSerializer,BusEditSerializer
 from django.utils import timezone
 
 
@@ -95,7 +95,7 @@ class BusView(ViewSet):
     def update(self, request, *args, **kwargs):
         id = kwargs.get("pk")
         obj = get_object_or_404(Buses, id=id)
-        serializer = BusSerializer(instance=obj, data=request.data)
+        serializer = BusSerializer(instance=obj, data=request.data, partial=True)  # Use partial=True to allow partial updates
         if obj.Operator == request.user.busoperator:
             if serializer.is_valid():
                 serializer.save()

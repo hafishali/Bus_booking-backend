@@ -21,13 +21,34 @@ class CategorySerializer(serializers.ModelSerializer):
         fields =["id","name","is_active"]
 
 class BusSerializer(serializers.ModelSerializer):
-    id=serializers.CharField(read_only=True)
-    category=serializers.CharField(read_only=True)
-    is_active=serializers.BooleanField(read_only=True)
+    id = serializers.CharField(read_only=True)
+    category = serializers.CharField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = Buses
-        fields = ["id","name","description","price","image","is_active","category","boarding_point","boarding_time","dropping_point","dropping_time","duration","capacity"]
+        fields = ["id", "name", "description", "price", "image", "is_active", "category", "boarding_point", "boarding_time", "dropping_point", "dropping_time", "duration", "capacity"]
+        
+        
+class BusEditSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
     
+
+    class Meta:
+        model = Buses
+        fields = ["id", "name", "description", "price",  "is_active", "category", "boarding_point", "boarding_time", "dropping_point", "dropping_time", "duration", "capacity"]
+
+    # Override the update method to handle image field not being required
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        if request and request.method == 'PUT':
+            # Mark image field as not required for updates
+            validated_data['image'] = validated_data.get('image', instance.image)
+            # Add more fields as needed
+        return super().update(instance, validated_data)
+
+    
+            # Add more fields as needed
 
 class OfferSerializer(serializers.ModelSerializer):
     bus=serializers.CharField(read_only=True)

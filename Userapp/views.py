@@ -66,19 +66,27 @@ class BusView(ViewSet):
         return Response(data=serializer.data)
     
 
-    @action(methods=["post"],detail=True)
-    def reserve_bus(self,request,*args,**kwargs):
-        serializer=ReservationSerializer(data=request.data)
-        bus_id=kwargs.get("pk")
-        user_id=request.user.id
-        user_obj=users.objects.get(id=user_id)
-        Bus_obj=Buses.objects.get(id=bus_id)
+    @action(methods=["post"], detail=True)
+    def reserve_bus(self, request, *args, **kwargs):
+        bus_id = kwargs.get("pk")
+        user_id = request.user.id
+        user_obj = users.objects.get(id=user_id)
+        bus_obj = Buses.objects.get(id=bus_id)
+        
+        # Create a mutable copy of request.data
+        mutable_data = request.data.copy()
+        
+        # Pass seat_numbers as a list in the mutable data
+        seat_numbers = mutable_data.get('seat_numbers', '').split(',')  # Assuming seat_numbers is passed as comma-separated string
+        mutable_data['seat_numbers'] = seat_numbers
+        
+        serializer = ReservationSerializer(data=mutable_data)
         
         if serializer.is_valid():
-            serializer.save(bus=Bus_obj, user=user_obj)
-            return Response(data=serializer.data)
+            serializer.save(bus=bus_obj, user=user_obj)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(data=serializer.errors)
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
     
