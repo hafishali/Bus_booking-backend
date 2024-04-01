@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Manager.models import SuperAdmin,Busoperator,users,Buses,Reservation
+from Manager.models import SuperAdmin,Busoperator,users,Buses,Reservation,Payment
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     id=serializers.CharField(read_only=True)
@@ -37,7 +37,12 @@ class BusSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Reservation
-        fields="_all_"
+        fields="__all__"
+        
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Payment
+        fields="__all__"
         
 
 class profileSerializer(serializers.ModelSerializer):

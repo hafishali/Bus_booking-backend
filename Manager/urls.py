@@ -9,6 +9,8 @@ router.register("busoperators",views.busoperator,basename="busoperators_list")
 router.register("users",views.usersview,basename="users_list")
 router.register("buses",views.busview,basename="bus_list")
 router.register("reservation",views.ReservationView,basename="reservation_list")
+router.register("PaymentView",views.PaymentView,basename="PaymentView")
+
 
 
 

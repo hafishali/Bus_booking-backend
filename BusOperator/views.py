@@ -194,9 +194,10 @@ class ReservationView(ViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def list(self, request, *args, **kwargs):
-        qs = Reservation.objects.filter(Operator=request.user.busoperator)
+        # Filter reservations based on the operator of the authenticated user's bus
+        qs = Reservation.objects.filter(bus__Operator=request.user.busoperator)
         serializer = ReservationSerializer(qs, many=True)
-        return Response(data=serializer.data)
+        return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         id = kwargs.get("pk")

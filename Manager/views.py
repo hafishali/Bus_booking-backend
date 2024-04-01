@@ -4,7 +4,7 @@ from rest_framework import authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions,status
-from Manager.serializers import SuperAdminSerializer,OperatorSerializer,UserSerializer,BusSerializer,ReservationSerializer,profileSerializer
+from Manager.serializers import SuperAdminSerializer,OperatorSerializer,UserSerializer,BusSerializer,ReservationSerializer,profileSerializer,PaymentSerializer
 from Manager.models import Category,Busoperator,Buses,Reservation,users,Payment,SuperAdmin
 
 
@@ -109,6 +109,23 @@ class ReservationView(ViewSet):
         qs=Reservation.objects.get(id=id)
         serializer=ReservationSerializer(qs)
         return Response(data=serializer.data)
+    
+    
+class PaymentView(ViewSet):
+    authentication_classes=[authentication.TokenAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+    
+    def list(self,request,*args,**kwargs):
+        qs=Payment.objects.all()
+        serializer=PaymentSerializer(qs,many=True)
+        return Response(data=serializer.data)
+    
+    def retrieve(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        qs=Payment.objects.get(id=id)
+        serializer=PaymentSerializer(qs)
+        return Response(data=serializer.data)
+    
     
 class ProfileEdit(APIView):
     authentication_classes=[authentication.TokenAuthentication]

@@ -81,11 +81,13 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields="__all__"
 
 class ReservationSerializer(serializers.ModelSerializer):
-    bus=BusSerializer()
-    user=UserSerializer()
     class Meta:
-        model=Reservation
-        fields="__all__"
+        model = Reservation
+        fields = "__all__"
+
+    def filter_by_operator_id(self, operator_id):
+        reservations = Reservation.objects.filter(bus__Operator__id=operator_id)
+        return reservations
 
 
 class profileSerializer(serializers.ModelSerializer):
