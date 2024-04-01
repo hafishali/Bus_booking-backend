@@ -168,12 +168,12 @@ class BusesViewSet(viewsets.ModelViewSet):
 
         if from_location and to_location and category:
             queryset = Buses.objects.filter(
-                Q(boarding_point__icontains=from_location) | Q(dropping_point__icontains=to_location),
+                Q(boarding_point=from_location) | Q(dropping_point=to_location),
                 category__name=category
             )
         elif from_location and to_location:
             queryset = Buses.objects.filter(
-                Q(boarding_point__icontains=from_location) | Q(dropping_point__icontains=to_location)
+                Q(boarding_point=from_location) | Q(dropping_point=to_location)
             )
         elif category:
             queryset = Buses.objects.filter(
@@ -195,7 +195,7 @@ class PaymentView(ViewSet):
     
     def list(self, request, *args, **kwargs):
         user_id = request.user.id  # Get the logged-in user's ID
-        qs = Payment.objects.filter(user=user_id)  # Filter payments by user ID
+        qs = Payment.objects.filter(id=user_id)  # Filter payments by user ID
         serializer = PaymentSerializer(qs, many=True)
         return Response(data=serializer.data)
     

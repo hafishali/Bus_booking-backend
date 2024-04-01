@@ -177,7 +177,7 @@ class PaymentView(ViewSet):
     permission_classes=[permissions.IsAuthenticated]
     
     def list(self,request,*args,**kwargs):
-        qs=Payment.objects.all()
+        qs = Payment.objects.filter(reservation__bus__Operator=request.user.busoperator)
         serializer=PaymentSerializer(qs,many=True)
         return Response(data=serializer.data)
     
@@ -194,7 +194,6 @@ class ReservationView(ViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def list(self, request, *args, **kwargs):
-        # Filter reservations based on the operator of the authenticated user's bus
         qs = Reservation.objects.filter(bus__Operator=request.user.busoperator)
         serializer = ReservationSerializer(qs, many=True)
         return Response(serializer.data)

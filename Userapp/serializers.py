@@ -63,11 +63,11 @@ class ReservationViewSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     amount=serializers.CharField(read_only=True)
-    user=serializers.CharField(read_only=True)
-    reservation=serializers.CharField(read_only=True)
+    user_name = serializers.CharField(source='user.name', read_only=True)
+    reservation_data = ReservationSerializer(source='reservation', read_only=True)
     class Meta:
         model=Payment
-        fields="__all__"
+        fields=["id","amount","payment_time","payment_status","user","user_name","reservation","reservation_data"]
         
         
 class profileSerializer(serializers.ModelSerializer):

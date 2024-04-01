@@ -73,13 +73,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=users
         fields=["name","profile_picture","date_of_birth","address"]
-
-
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Payment
-        fields="__all__"
-
+        
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
@@ -88,6 +82,21 @@ class ReservationSerializer(serializers.ModelSerializer):
     def filter_by_operator_id(self, operator_id):
         reservations = Reservation.objects.filter(bus__Operator__id=operator_id)
         return reservations
+
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    amount=serializers.CharField(read_only=True)
+    user_name = serializers.CharField(source='user.name', read_only=True)
+    reservation_data = ReservationSerializer(source='reservation', read_only=True)
+    class Meta:
+        model=Payment
+        fields=["id","amount","payment_time","payment_status","user","user_name","reservation","reservation_data"]
+        
+    def filter_by_operator_id(self, operator_id):
+        payments = Payment.objects.filter(reservation__bus__Operator__id=operator_id)
+        return payments
+
 
 
 class profileSerializer(serializers.ModelSerializer):
