@@ -10,7 +10,7 @@ from rest_framework import viewsets
 from Manager.models import Category,Busoperator,Buses,Reservation,users,Payment
 
 
-from Userapp.serializers import UserSerializer,CategorySerializer,OperatorSerializer,BusSerializer,ReviewSerializer,ReservationSerializer,PaymentSerializer,ReservationViewSerializer,profileSerializer
+from Userapp.serializers import UserSerializer,CategorySerializer,OperatorSerializer,BusSerializer,ReviewSerializer,PaymentSerializer,ReservationViewSerializer,profileSerializer,ReservationSerializer
 
 
 # Create your views here.
@@ -66,27 +66,19 @@ class BusView(ViewSet):
         return Response(data=serializer.data)
     
 
-    @action(methods=["post"], detail=True)
-    def reserve_bus(self, request, *args, **kwargs):
-        bus_id = kwargs.get("pk")
-        user_id = request.user.id
-        user_obj = users.objects.get(id=user_id)
-        bus_obj = Buses.objects.get(id=bus_id)
-        
-        # Create a mutable copy of request.data
-        mutable_data = request.data.copy()
-        
-        # Pass seat_numbers as a list in the mutable data
-        seat_numbers = mutable_data.get('seat_numbers', '').split(',')  # Assuming seat_numbers is passed as comma-separated string
-        mutable_data['seat_numbers'] = seat_numbers
-        
-        serializer = ReservationSerializer(data=mutable_data)
+    @action(methods=["post"],detail=True)
+    def reserve_bus(self,request,*args,**kwargs):
+        serializer=ReservationSerializer(data=request.data)
+        bus_id=kwargs.get("pk")
+        user_id=request.user.id
+        user_obj=users.objects.get(id=user_id)
+        Bus_obj=Buses.objects.get(id=bus_id)
         
         if serializer.is_valid():
-            serializer.save(bus=bus_obj, user=user_obj)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save(bus=Bus_obj, user=user_obj)
+            return Response(data=serializer.data)
         else:
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=serializer.errors)
         
 
     
