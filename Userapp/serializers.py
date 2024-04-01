@@ -25,10 +25,11 @@ class OperatorSerializer(serializers.ModelSerializer):
 
 class BusSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
+    operator_name = serializers.CharField(source='Operator.name', read_only=True)
 
     class Meta:
         model = Buses
-        fields = ["id", "name", "description", "price", "image", "is_active", "category_name", "boarding_point", "boarding_time", "dropping_point", "dropping_time", "duration", "capacity", "Operator"]
+        fields = ["id", "name", "description", "price", "image", "is_active", "category_name", "boarding_point", "boarding_time", "dropping_point", "dropping_time", "duration", "capacity", "Operator","operator_name"]
 
 
 

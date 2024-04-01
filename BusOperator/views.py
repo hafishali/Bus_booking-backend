@@ -190,20 +190,24 @@ class PaymentView(ViewSet):
 
 
 class ReservationView(ViewSet):
-    authentication_classes=[authentication.TokenAuthentication]
-    permission_classes=[permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     
-    def list(self,request,*args,**kwargs):
-        qs=Reservation.objects.all()
-        serializer=ReservationSerializer(qs,many=True)
-        return Response(data=serializer.data)
-    
-    def retrieve(self,request,*args,**kwargs):
-        id=kwargs.get("pk")
-        qs=Reservation.objects.get(id=id)
-        serializer=ReservationSerializer(qs)
+    def list(self, request, *args, **kwargs):
+        qs = Reservation.objects.filter(Operator=request.user.busoperator)
+        serializer = ReservationSerializer(qs, many=True)
         return Response(data=serializer.data)
 
+    def retrieve(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        try:
+            qs = Reservation.objects.get(id=id)
+            serializer = ReservationSerializer(qs)
+            return Response(data=serializer.data)
+        except Reservation.DoesNotExist:
+            return Response(data={"message": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        
 class ReviewListView(APIView):
     def get(self, request, *args, **kwargs):
         # Retrieve all reviews
