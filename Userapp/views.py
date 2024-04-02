@@ -10,7 +10,7 @@ from rest_framework import viewsets
 from Manager.models import Category,Busoperator,Buses,Reservation,users,Payment
 
 
-from Userapp.serializers import UserSerializer,CategorySerializer,OperatorSerializer,BusSerializer,ReviewSerializer,PaymentSerializer,ReservationViewSerializer,profileSerializer,ReservationSerializer
+from Userapp.serializers import UserSerializer,CategorySerializer,OperatorSerializer,BusSerializer,ReviewSerializer,PaymentSerializer,ReservationViewSerializer,profileSerializer,ReservationSerializer,PaymentviewSerializer
 
 
 # Create your views here.
@@ -195,12 +195,12 @@ class PaymentView(ViewSet):
     
     def list(self, request, *args, **kwargs):
         user_id = request.user.id  # Get the logged-in user's ID
-        qs = Payment.objects.filter(id=user_id)  # Filter payments by user ID
+        qs = Payment.objects.filter(id=user_id)  
         serializer = PaymentSerializer(qs, many=True)
         return Response(data=serializer.data)
     
     def retrieve(self, request, *args, **kwargs):
         id = kwargs.get("pk")
-        qs = Payment.objects.get(id=id, user=request.user.id)  # Filter payment by user ID
+        qs = Payment.objects.get(id=id, user=request.user.id)  
         serializer = PaymentSerializer(qs)
         return Response(data=serializer.data)
