@@ -35,14 +35,23 @@ class BusSerializer(serializers.ModelSerializer):
         
 
 class ReservationSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    bus = BusSerializer()
+
     class Meta:
-        model=Reservation
-        fields="__all__"
+        model = Reservation
+        fields = ['id', 'user', 'bus', 'seat_number', 'journey_date', 'reservation_time', 'reservation_status', 'is_confirmed']
+        
         
 class PaymentSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()  # Assuming you want to display user details as string
+    reservation = ReservationSerializer()  # Assuming ReservationSerializer is defined
+    bus_operator = serializers.CharField(source='reservation.bus.Operator')  # Assuming 'Operator' is a field in the Bus model
+    bus = serializers.PrimaryKeyRelatedField(source='reservation.bus', queryset=Buses.objects.all())  # Assuming Bus model and queryset is defined
+
     class Meta:
-        model=Payment
-        fields="__all__"
+        model = Payment
+        fields = '__all__'
         
 
 class profileSerializer(serializers.ModelSerializer):

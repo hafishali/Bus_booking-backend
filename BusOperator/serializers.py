@@ -75,9 +75,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields=["name","profile_picture","date_of_birth","address"]
         
 class ReservationSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    bus = BusSerializer()
+
     class Meta:
         model = Reservation
-        fields = "__all__"
+        fields = ['id', 'user', 'bus', 'seat_number', 'journey_date', 'reservation_time', 'reservation_status', 'is_confirmed']
 
     def filter_by_operator_id(self, operator_id):
         reservations = Reservation.objects.filter(bus__Operator__id=operator_id)

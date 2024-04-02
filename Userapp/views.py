@@ -195,12 +195,15 @@ class PaymentView(ViewSet):
     
     def list(self, request, *args, **kwargs):
         user_id = request.user.id  # Get the logged-in user's ID
-        qs = Payment.objects.filter(id=user_id)  
+        qs = Payment.objects.filter(user=user_id)  # Filter payments for the logged-in user
         serializer = PaymentSerializer(qs, many=True)
         return Response(data=serializer.data)
     
     def retrieve(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        qs = Payment.objects.get(id=id, user=request.user.id)  
+        payment_id = kwargs.get("pk")
+        user_id = request.user.id
+        qs = Payment.objects.filter(id=payment_id, user=user_id).first()  # Use filter instead of get
+        if not qs:
+            return Response(status=404)  # Handle case where payment doesn't exist for the user
         serializer = PaymentSerializer(qs)
         return Response(data=serializer.data)
