@@ -73,10 +73,11 @@ class PaymentSerializer(serializers.ModelSerializer):
     amount = serializers.CharField(read_only=True)
     user = serializers.CharField(read_only=True)
     bus = BusSerializer(source='reservation.bus', read_only=True)  # Nested serializer for bus details
+    reservation_data = ReservationSerializer(source='reservation', read_only=True)
 
     class Meta:
         model = Payment
-        fields = ["id", "amount", "payment_time", "payment_status", "user", "bus"]
+        fields = ["id", "amount", "payment_time", "payment_status", "user", "bus","reservation_data"]
         
         
 class profileSerializer(serializers.ModelSerializer):
