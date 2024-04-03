@@ -70,12 +70,13 @@ class PaymentviewSerializer(serializers.ModelSerializer):
         fields=["id","amount","payment_time","payment_status","user","user_name","reservation"]
 
 class PaymentSerializer(serializers.ModelSerializer):
-    amount=serializers.CharField(read_only=True)
-    user=serializers.CharField(read_only=True)
-    bus=serializers.CharField(source='reservation.bus',read_only=True)
+    amount = serializers.CharField(read_only=True)
+    user = serializers.CharField(read_only=True)
+    bus = BusSerializer(source='reservation.bus', read_only=True)  # Nested serializer for bus details
+
     class Meta:
-        model=Payment
-        fields=["id","amount","payment_time","payment_status","user","user","bus"]
+        model = Payment
+        fields = ["id", "amount", "payment_time", "payment_status", "user", "bus"]
         
         
 class profileSerializer(serializers.ModelSerializer):
